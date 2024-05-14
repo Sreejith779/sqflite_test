@@ -14,7 +14,8 @@ class SqlHelper{
   }
 
   static createTable(sql.Database database) async{
-    await database.execute("sql");
+    await database.execute(
+        "CREATE TABLE MyNotes(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, title TEXT,description TEXT)");
   }
 
 }
