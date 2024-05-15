@@ -1,21 +1,42 @@
 
 
-import 'package:flutter/cupertino.dart';
+ 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../bloc/home_bloc.dart';
+ 
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  HomeBloc homeBloc = HomeBloc();
+  @override
+  void initState() {
+    homeBloc.add(HomeInitialEvent());
+    super.initState();
+  }
   TextEditingController emailController = TextEditingController();
   TextEditingController desController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    return BlocConsumer<HomeBloc,HomeState>(
+      bloc: homeBloc,
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, state) {
+switch(state.runtimeType){
+  case HomeLoadingState:
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  case HomeLoadedState:
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepPurpleAccent.shade100,
@@ -32,8 +53,15 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+
+  default:
+    return SizedBox();
+}
+
+  },
+);
   }
-  void showSheet(BuildContext context, TextEditingController emailController, TextEditingController desController, int? id) {
+  void showSheet(BuildContext context, TextEditingController titleController, TextEditingController desController, int? id) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -52,28 +80,30 @@ class _HomePageState extends State<HomePage> {
                   hintText: "title",
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide()
+                      borderSide: const BorderSide()
                   )
               ),
-              controller: emailController,
+              controller: titleController,
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             TextField(
               decoration: InputDecoration(
                   hintText: "description",
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide()
+                      borderSide: const BorderSide()
                   )
               ),
               controller: desController,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             ElevatedButton(
                 onPressed: () {
-                  // Add your submit functionality here
+          var title = titleController.text;
+          var description = desController.text;
+          homeBloc.add(HomeAddNotes(title: title, description: description));
                 },
                 child: Text(id==null?"Submit":"Update")
             )

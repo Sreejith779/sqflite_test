@@ -18,4 +18,15 @@ class SqlHelper{
         "CREATE TABLE MyNotes(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, title TEXT,description TEXT)");
   }
 
+  static Future<int>addNote(String title, String description) async{
+
+    final db = await SqlHelper.openOrCreateDb();
+    final data =  {
+      "title":title,
+      "description":description
+    };
+    final id = db.insert("MyNotes",data);
+    return id;
+  }
+
 }
