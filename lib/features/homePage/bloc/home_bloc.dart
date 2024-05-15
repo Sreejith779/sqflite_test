@@ -21,6 +21,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   FutureOr<void> homeAddNotes(HomeAddNotes event, Emitter<HomeState> emit) async{
 
     int id = await SqlHelper.addNote(event.title,event.description);
+    emit(AddNoteActionState(id: id));
 
   }
 }

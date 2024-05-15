@@ -3,6 +3,7 @@
  
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sqflite_test/features/homePage/ui/widgets/snackBar.dart';
 
 import '../bloc/home_bloc.dart';
  
@@ -27,8 +28,18 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return BlocConsumer<HomeBloc,HomeState>(
       bloc: homeBloc,
+  listenWhen: (previous,current)=>current is HomeActionState,
+  buildWhen: (previous,current)=>current is! HomeActionState,
   listener: (context, state) {
-    // TODO: implement listener
+     switch(state.runtimeType){
+       case AddNoteActionState:
+         final idState = state as AddNoteActionState;
+         if(idState.id!=null){
+           showSuccessSnackBar(context);
+         }else{
+           showErrorSnackBar(context);
+         }
+     }
   },
   builder: (context, state) {
 switch(state.runtimeType){
@@ -104,7 +115,11 @@ switch(state.runtimeType){
           var title = titleController.text;
           var description = desController.text;
           homeBloc.add(HomeAddNotes(title: title, description: description));
-                },
+          titleController.clear();
+          desController.clear();
+          Navigator.pop(context);
+
+                } ,
                 child: Text(id==null?"Submit":"Update")
             )
           ],
