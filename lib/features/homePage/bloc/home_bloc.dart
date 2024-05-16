@@ -12,6 +12,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeInitial()) {
  on<HomeInitialEvent>(homeInitialEvent);
  on<HomeAddNotes>(homeAddNotes);
+ on<HomeUpdateNotes>(homeUpdateNotes);
   }
 
 
@@ -37,4 +38,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   }
 
+
+  FutureOr<void> homeUpdateNotes(HomeUpdateNotes event, Emitter<HomeState> emit) async{
+    final uData = await SqlHelper.updatedData(event.title,event.description);
+  }
 }

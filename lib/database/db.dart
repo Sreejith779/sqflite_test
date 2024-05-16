@@ -24,4 +24,13 @@ class SqlHelper {
     final db = await SqlHelper.openOrCreateDb();
     return db.query("MyNotes", orderBy: 'id');
   }
+
+  static Future<int>updatedData(String utitle, String udescription) async{
+    final db = await SqlHelper.openOrCreateDb();
+    var data = {"title":utitle,'description':udescription};
+   final udata = db.update('MyNotes', data);
+
+  }
+
+
 }

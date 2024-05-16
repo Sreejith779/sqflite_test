@@ -158,6 +158,8 @@ class _HomePageState extends State<HomePage> {
                   if(id == null){
                     homeBloc.add(
                         HomeAddNotes(title: title, description: description));
+                  }else{
+                    homeBloc.add(HomeUpdateNotes(title: title, description: description));
                   }
 
                   titleController.clear();

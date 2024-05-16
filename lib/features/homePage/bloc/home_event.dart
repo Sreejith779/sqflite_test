@@ -11,3 +11,10 @@ class HomeAddNotes extends HomeEvent{
 
   HomeAddNotes({required this.title, required this.description});
 }
+
+class HomeUpdateNotes extends HomeEvent{
+  final String title;
+  final String description;
+
+  HomeUpdateNotes({required this.title, required this.description});
+}
